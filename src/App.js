@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
+
+  const [valores, setValores] = useState([])
+  const [recuperado, setRecuperado] = useState(false)
+
+  function mostrarTabla() {
+    const {find} = valores
+    console.log(valores)
+    const values= ""
+   
+    return (
+      <p>
+        {(String(Array.from(find.Estilo)))}
+     
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    )}
+  
+  useEffect(() => {
+    const ur = 'https://serverbackendikant.herokuapp.com/api/login/'
+    const url= 'https://serverbackendikant.herokuapp.com/api/get/buscarForm'
+    const body = {
+      "Codigo":-2
+    } 
+        fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(body ),
+      headers:{
+        'Content-Type': 'application/json'
+      }
+      })
+      .then(response =>  response.json())
+      .then(setRecuperado(true))
+      .then(response=> setValores(response) )
+      .catch(error => console.error('Error:', error))
+  }, [])
+
+
+  if (recuperado)
+    return mostrarTabla()
+  else
+    return (<div>recuperando datos...</div>)
 }
 
-export default App;
+export default App
